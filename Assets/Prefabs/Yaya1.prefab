@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2940700821017095217}
   - component: {fileID: 6621075370255445474}
   - component: {fileID: 8073669493745158260}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Yaya1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 211b2f3a2fa001346ad3f7007bdf6adb, type: 2}
-  easeType: 1
+  easeType: 27
+  building: {fileID: 0}
   spriteRenderer: {fileID: 4768677898818751613}
 --- !u!1 &1488662595816110988
 GameObject:
@@ -107,7 +108,7 @@ GameObject:
   - component: {fileID: 3302043984593629807}
   - component: {fileID: 7933968282573350784}
   - component: {fileID: 4817569456193850267}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Button (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,7 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 452644589445081061}
   - component: {fileID: 4768677898818751613}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Media
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +313,7 @@ GameObject:
   - component: {fileID: 7090453690387926237}
   - component: {fileID: 2447474872368271627}
   - component: {fileID: 888025273376541684}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -415,7 +416,7 @@ GameObject:
   - component: {fileID: 3044638187918819705}
   - component: {fileID: 7941520140549758513}
   - component: {fileID: 5019626710187863136}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +553,7 @@ GameObject:
   - component: {fileID: 5494723719271862300}
   - component: {fileID: 397997151739367160}
   - component: {fileID: 5079551631709083048}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Button (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -672,7 +673,7 @@ GameObject:
   - component: {fileID: 8741460758024668323}
   - component: {fileID: 5560767260656336680}
   - component: {fileID: 289067447534617520}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -808,7 +809,7 @@ GameObject:
   - component: {fileID: 8704478259988365597}
   - component: {fileID: 4609493478415929627}
   - component: {fileID: 7169915815132820086}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -941,7 +942,7 @@ GameObject:
   - component: {fileID: 968225766841302545}
   - component: {fileID: 6041106616146594088}
   - component: {fileID: 2491521239945617192}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

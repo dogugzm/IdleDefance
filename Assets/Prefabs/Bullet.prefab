@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6025653842764166638}
   - component: {fileID: 1474900918247576253}
   - component: {fileID: 2422131016921961612}
-  - component: {fileID: 1527388862716755358}
+  - component: {fileID: 3647662402923933853}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,8 +31,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1730491548537805559}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1474900918247576253
@@ -75,8 +74,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
-  m_Sprite: {fileID: 21300000, guid: efa1c1e32c866f14d823b00467c46c8a, type: 3}
+  m_SortingOrder: 5
+  m_Sprite: {fileID: 21300000, guid: da91f9cbb0be6ae4c8e493e286bb3797, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -132,7 +131,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1527388862716755358
+--- !u!114 &3647662402923933853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,43 +140,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 4305807917698564448}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66aca7de07c6ea84abef4fc6744fa3b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 39e42e0c0a2b6a14a89f171c95916e79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 3
-  bullet: {fileID: 4305807917698564448, guid: c713d5792904cc749b79a845abfa8163, type: 3}
-  bulletPoint: {fileID: 1730491548537805559}
-  layerUnit:
-    serializedVersion: 2
-    m_Bits: 64
---- !u!1 &5791911445624201385
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1730491548537805559}
-  m_Layer: 0
-  m_Name: BulletPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1730491548537805559
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5791911445624201385}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.536, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6025653842764166638}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

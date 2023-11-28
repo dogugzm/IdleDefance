@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour
 
     private void OnBuildingBuyClicked(BuildingSO _building)
     {
-        Building instantiatedGO = Instantiate(_building.buildingPrefab,new Vector3(8,4,-1f),Quaternion.identity).GetComponent<Building>();
+        Building instantiatedGO = Instantiate(_building.buildingPrefab,new Vector3(8,4,0f),Quaternion.identity).GetComponent<Building>();
         instantiatedGO.data = _building;
     }
 

@@ -588,7 +588,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &5204099934042047234
 MonoBehaviour:
@@ -841,7 +841,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 13c7b09c095104e45a311b00bb81e825, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -915,6 +915,10 @@ MonoBehaviour:
   RotateButton: {fileID: 7219117932517637996}
   PreColor: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
   AfterColor: {r: 1, g: 1, b: 1, a: 1}
+  Rotatable: {fileID: 0}
+  loadingImage: {fileID: 0}
+  instantiatedUnitNumberText: {fileID: 0}
+  instantiatedUnitNumber: 0
   spriteRenderers:
   - {fileID: 3398834974606697476}
   data: {fileID: 11400000, guid: cc7f516c9c90c4349a4d1fececbc92bd, type: 2}
