@@ -17,7 +17,7 @@ public class StoreManager : MonoBehaviour
     private void OnEnable()
     {
         Building.BuilingApprovedAction += BuyBuilding;
-        Building.AddMoneyOnEveryXSecond += GainMoney;
+        SingleBuilding.AddMoneyOnEveryXSecond += GainMoney;
 
     }
 

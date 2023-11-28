@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum UnitTypes
+public enum BuildingTypes
 {
     SINGLE,
     MULTIPLE,
@@ -15,7 +15,7 @@ public class BuildingSO : ScriptableObject
 {
     public string SOname;
     public int cost;
-    public UnitTypes type;
+    public BuildingTypes type;
     public GameObject buildingPrefab;
  
 }

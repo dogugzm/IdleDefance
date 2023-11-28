@@ -1,48 +1,59 @@
+using DG.Tweening;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using DG.Tweening;
 
 //TODO: inheritance for all building types.
-public class Building : MonoBehaviour 
+public class Building : MonoBehaviour
 {
     [SerializeField] Button MoveButton;
     [SerializeField] Button OKButton;
     [SerializeField] Button RotateButton;
 
-
     [SerializeField] Color PreColor;
     [SerializeField] Color AfterColor;
 
-    public static Action<int> BuilingApprovedAction;
-    public static Action AddMoneyOnEveryXSecond;
+    [SerializeField] Transform Rotatable;
 
-    bool approved = false;
-    [SerializeField]  SpriteRenderer spriteRenderer;
+    public Image loadingImage;
+    public TextMeshProUGUI instantiatedUnitNumberText;
+    public int instantiatedUnitNumber;
+
+    public static Action<int> BuilingApprovedAction;
+
+    protected bool approved = false;
+
+    [SerializeField] SpriteRenderer[] spriteRenderers;
     public BuildingSO data;
-    float timer;
+    protected float timer;
+
+    protected void ChangeColor(Color color)
+    {
+        foreach (var sprite in spriteRenderers)
+        {
+            sprite.color = color;
+        }
+    }
 
     private void OnEnable()
     {
         AddEventToButton(MoveButton);
         OKButton.onClick.AddListener(BuildingApproved);
         RotateButton.onClick.AddListener(RotationClicked);
-
     }
 
     private void RotationClicked()
     {
-        transform.DORotate(new Vector3(0,0,-90),0.5f,RotateMode.WorldAxisAdd).SetEase(Ease.OutElastic);
+        Rotatable.DORotate(new Vector3(0, 0, -90), 0.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutElastic);
     }
 
     private void Start()
     {
-        spriteRenderer.color = PreColor;     
+        ChangeColor(PreColor);
     }
-    
+
     private void BuildingApproved()
     {
         GridManager.Instance.SetTileAfterBuilding(transform.position, data.type);
@@ -54,32 +65,25 @@ public class Building : MonoBehaviour
         approved = true;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (!approved)
         {
             return;
         }
-
-        switch (data.type)
-        {
-            case UnitTypes.SINGLE:
-                timer += Time.deltaTime;
-                if (timer>1)
-                {
-                    AddMoneyOnEveryXSecond.Invoke();
-                    timer = 0;
-                }
-                break;
-            case UnitTypes.MULTIPLE:
-                break;
-            case UnitTypes.L:
-                break;
-            default:
-                break;
-        }
     }
 
+    protected virtual void CreateUnit()
+    {      
+        instantiatedUnitNumber++;
+        instantiatedUnitNumberText.text = "x" + instantiatedUnitNumber.ToString();
+    }
+
+    public virtual void RemoveUnit()
+    {
+        instantiatedUnitNumber--;
+        instantiatedUnitNumberText.text = "x" + instantiatedUnitNumber.ToString();
+    }
 
     void AddEventToButton(Button button)
     {
@@ -118,8 +122,7 @@ public class Building : MonoBehaviour
     private void OnEndDrag(PointerEventData data, Button button)
     {
         Debug.Log("End Drag");
-        spriteRenderer.color = AfterColor;
-
+        ChangeColor(AfterColor);
     }
 
     private void OnDrag(PointerEventData data, Button button)
@@ -129,14 +132,14 @@ public class Building : MonoBehaviour
         //mousePos.z = -Camera.main.transform.position.z;  // Adjust the Z coordinate based on the camera's distance
         Vector2 newPosition = Camera.main.ScreenToWorldPoint(mousePos);
 
-        Vector3 targetPos =  new Vector3(Mathf.RoundToInt(newPosition.x), Mathf.RoundToInt(newPosition.y), 0);
+        Vector3 targetPos = new Vector3(Mathf.RoundToInt(newPosition.x), Mathf.RoundToInt(newPosition.y), -1);
         transform.DOMove(targetPos, 0.2f).SetEase(Ease.Flash);
     }
 
     private void OnBeginDrag(PointerEventData data, Button button)
     {
         Debug.Log("Begin Drag");
-        spriteRenderer.color = PreColor;
+        ChangeColor(PreColor);
     }
 
     #endregion

@@ -36,12 +36,12 @@ public class UIManager : MonoBehaviour
 
     private void OnBuildingBought(int data)
     {
-        CloseButtonClicked();
+        //CloseButtonClicked();
         moneyText.text = "Money:  " + data;
     }
     private void AnyTileClicked(int arg1, int arg2)
     {
-        OpenStorePanel();
+        //OpenStorePanel();
     }
 
     private void OpenStorePanel()
@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour
 
     private void OnBuildingBuyClicked(BuildingSO _building)
     {
-        Building instantiatedGO = Instantiate(_building.buildingPrefab).GetComponent<Building>();
+        Building instantiatedGO = Instantiate(_building.buildingPrefab,new Vector3(8,4,-1f),Quaternion.identity).GetComponent<Building>();
         instantiatedGO.data = _building;
     }
 

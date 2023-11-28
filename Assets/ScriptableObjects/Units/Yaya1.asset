@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b005daf2553e780498deb26cb851e72e, type: 3}
-  m_Name: LTypeBuilding
+  m_Script: {fileID: 11500000, guid: 5bf68c9d9e8e36f4b8d05dc027faba42, type: 3}
+  m_Name: Yaya1
   m_EditorClassIdentifier: 
-  SOname: HORSE
-  cost: 100
-  type: 2
-  buildingPrefab: {fileID: 8868142939700084853, guid: 551878042223c9247919c667c5f9b02d, type: 3}
+  SOname: Yaya1
+  AttackPoint: 10
+  Health: 100
+  DefencePower: 5
+  speed: 0.3
+  prefab: {fileID: 1353151611229980155, guid: 7d5c995acb3ef1040bf3fb651f58d596, type: 3}

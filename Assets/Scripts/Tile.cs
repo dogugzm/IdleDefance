@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour, IPointerDownHandler
+public class Tile : MonoBehaviour
 {
     [SerializeField] Color baseColor;
     [SerializeField] Color offsetColor;
@@ -15,7 +11,6 @@ public class Tile : MonoBehaviour, IPointerDownHandler
 
     public bool hasBuilding = false;
     public bool isEnemySide = false;
-
 
     private void Awake()
     {
@@ -32,8 +27,13 @@ public class Tile : MonoBehaviour, IPointerDownHandler
         {
             spriteRenderer.color = _isOffset ? offsetColor : baseColor;
         }
-        x = _x; 
+        x = _x;
         y = _y;
+    }
+
+    public void ChangeColor()
+    {
+        spriteRenderer.color = Color.black;
     }
 
     private void OnMouseDown()
@@ -43,12 +43,8 @@ public class Tile : MonoBehaviour, IPointerDownHandler
 
     private void MouseClicked()
     {
-        GridManager.TileClickEvent?.Invoke(x,y);
-    }
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("Pointer Down");
+        Debug.Log(x + " - " + y);
+        GridManager.TileClickEvent?.Invoke(x, y);
     }
 
 
