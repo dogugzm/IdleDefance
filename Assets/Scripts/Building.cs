@@ -35,6 +35,7 @@ public class Building : MonoBehaviour
 
     protected List<UnitData> unitDatas = new List<UnitData>();
 
+    bool isRotating = false;
 
     protected float timer;
 
@@ -72,20 +73,39 @@ public class Building : MonoBehaviour
                 buildingType.unit.speed = item.unitDatas[0].speed;
             }
         }
+
+        
+
     }
 
-    private void RotationClicked()
+    
+
+    public void RotationClicked()
     {
-        Rotatable.DORotate(new Vector3(0, 0, -90), 0.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutElastic);
+        if (isRotating)
+        {
+            return;
+        }
+        isRotating = true;
+        Rotatable.DORotate(new Vector3(0, 0, -90), 0.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutElastic).OnComplete(() => isRotating = false);
     }
 
     private void Start()
     {
         ChangeColor(PreColor);
+        foreach (var item in spriteRenderers)
+        {
+            item.DOFade(0.5f, 0.5f).SetLoops(-1,LoopType.Yoyo);
+        }
     }
 
-    private void BuildingApproved()
+    public void BuildingApproved()
     {
+        DOTween.KillAll();
+        foreach (var item in spriteRenderers)
+        {
+            item.DOFade(1f, 1f);
+        }
         GridManager.Instance.SetTileAfterBuilding(transform.position, buildingType.type);
 
         MoveButton.gameObject.SetActive(false);

@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI moneyText;
 
+    Building tempBuilding;
+
     private void OnEnable()
     {
         BuildingSingleTypeButton.onClick.AddListener(delegate { OnBuildingBuyClicked(Building1); });
@@ -43,12 +45,14 @@ public class UIManager : MonoBehaviour
 
     private void CompleteButtonClicked()
     {
-        throw new NotImplementedException();
+        tempBuilding.BuildingApproved();
+        tempBuilding = null;
+        BuildingMovementPanel.SetActive(false);
     }
 
     private void RotateButtonClicked()
     {
-        throw new NotImplementedException();
+        tempBuilding.RotationClicked();
     }
 
     private void OnBuildingBought(int data)
@@ -76,8 +80,12 @@ public class UIManager : MonoBehaviour
 
     private void OnBuildingBuyClicked(BuildingSO _building)
     {
-        Building instantiatedGO = Instantiate(_building.buildingPrefab,new Vector3(8,4,0f),Quaternion.identity).GetComponent<Building>();
-        instantiatedGO.buildingType = _building;
+        if (tempBuilding!=null)
+        {
+            return;
+        }
+        tempBuilding = Instantiate(_building.buildingPrefab,new Vector3(8,4,0f),Quaternion.identity).GetComponent<Building>();
+        tempBuilding.buildingType = _building;
         BuildingMovementPanel.SetActive(true);
     }
 
