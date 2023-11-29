@@ -8,6 +8,8 @@ public class SingleBuilding : Building
 
     public static Action AddMoneyOnEveryXSecond;
 
+
+
     protected override void Update()
     {
         base.Update();

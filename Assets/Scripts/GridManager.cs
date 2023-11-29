@@ -6,12 +6,11 @@ using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 public class GridManager : MonoBehaviour
 {
     [SerializeField] private GameObject tilePreafab;
     [SerializeField] private GameObject EnemyPrefab;
-    [SerializeField] private int width;
-    [SerializeField] private int height;
     [SerializeField] private Camera cam;
 
     Unit clickedUnit = null;
@@ -62,10 +61,10 @@ public class GridManager : MonoBehaviour
 
     void Start()
     {
-        GenerateGrid();      
+        GenerateGrid(GameData.GridData.width,GameData.GridData.height);      
     }
 
-    void GenerateGrid()
+    void GenerateGrid(int width, int height)
     {
         tiles = new Dictionary<Vector2, Tile>();
 

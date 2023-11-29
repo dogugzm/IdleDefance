@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MultiBuilding : Building
 {
-    [SerializeField] UnitSO[] units;
+    //[SerializeField] UnitSO[] units;
     List<Unit> instantiatedUnits = new();
 
     protected override void Update()
@@ -29,7 +29,8 @@ public class MultiBuilding : Building
     protected override void CreateUnit()
     {
         base.CreateUnit();     
-        var instantiatedUnit = Instantiate(units[0].prefab, transform.position, Quaternion.identity);
+        GameObject instantiatedUnit = Instantiate(Resources.Load<GameObject>(buildingType.unit.SOname), transform.position, Quaternion.identity);
+       
         instantiatedUnit.GetComponent<Unit>().building = this;
         instantiatedUnits.Add(instantiatedUnit.GetComponent<Unit>());
         //instantiatedUnit.GetComponent<Unit>().targetVector = new Vector2(0, 8);

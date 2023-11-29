@@ -11,10 +11,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button BuildingMultiTypeButton;
     [SerializeField] private Button BuildingLTypeButton;
     [SerializeField] private Button CloseButton;
+
+    [SerializeField] private Button CompleteButton;
+    [SerializeField] private Button RotateButton;
+
     #endregion
 
     [Header("Panels")]
     [SerializeField] private GameObject StorePanel;
+    [SerializeField] private GameObject BuildingMovementPanel;
 
     [Header("Buildings")]
     [SerializeField] private BuildingSO Building1;
@@ -29,9 +34,21 @@ public class UIManager : MonoBehaviour
         BuildingSingleTypeButton.onClick.AddListener(delegate { OnBuildingBuyClicked(Building1); });
         BuildingMultiTypeButton.onClick.AddListener(delegate { OnBuildingBuyClicked(Building2); });
         BuildingLTypeButton.onClick.AddListener(delegate { OnBuildingBuyClicked(Building3); });
+        CompleteButton.onClick.AddListener(CompleteButtonClicked);
+        RotateButton.onClick.AddListener(RotateButtonClicked);
         CloseButton.onClick.AddListener(CloseButtonClicked);
         StoreManager.UpdateMoneyText += OnBuildingBought;
         GridManager.TileClickEvent += AnyTileClicked;
+    }
+
+    private void CompleteButtonClicked()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void RotateButtonClicked()
+    {
+        throw new NotImplementedException();
     }
 
     private void OnBuildingBought(int data)
@@ -39,6 +56,7 @@ public class UIManager : MonoBehaviour
         //CloseButtonClicked();
         moneyText.text = "Money:  " + data;
     }
+
     private void AnyTileClicked(int arg1, int arg2)
     {
         //OpenStorePanel();
@@ -59,7 +77,8 @@ public class UIManager : MonoBehaviour
     private void OnBuildingBuyClicked(BuildingSO _building)
     {
         Building instantiatedGO = Instantiate(_building.buildingPrefab,new Vector3(8,4,0f),Quaternion.identity).GetComponent<Building>();
-        instantiatedGO.data = _building;
+        instantiatedGO.buildingType = _building;
+        BuildingMovementPanel.SetActive(true);
     }
 
     #endregion

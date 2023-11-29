@@ -16,3 +16,4 @@ MonoBehaviour:
   cost: 200
   type: 1
   buildingPrefab: {fileID: 8868142939700084853, guid: 9503cbbe93895824abec2fea9e3c9744, type: 3}
+  unit: {fileID: 11400000, guid: 211b2f3a2fa001346ad3f7007bdf6adb, type: 2}

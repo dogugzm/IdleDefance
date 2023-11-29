@@ -12,7 +12,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform bulletPoint;
     [SerializeField] LayerMask layerUnit;
     
-
     private void Update()
     {
         timer += Time.deltaTime;
@@ -36,7 +35,6 @@ public class Enemy : MonoBehaviour
         Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, radius,layerUnit);
         float closestPos = 100;
         Unit closestUnit = null;
-        Debug.LogError(enemies.Length);
         foreach (Collider2D c in enemies)
         {
             float newClosest = Vector2.Distance(transform.position, c.transform.position);

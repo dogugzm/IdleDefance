@@ -544,7 +544,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4230320858164923054
 RectTransform:
   m_ObjectHideFlags: 0
@@ -921,7 +921,12 @@ MonoBehaviour:
   instantiatedUnitNumber: 0
   spriteRenderers:
   - {fileID: 3398834974606697476}
-  data: {fileID: 11400000, guid: cc7f516c9c90c4349a4d1fececbc92bd, type: 2}
+  myData:
+    SOname: 
+    cost: 0
+    type: 0
+    unitDatas: []
+  buildingType: {fileID: 11400000, guid: cc7f516c9c90c4349a4d1fececbc92bd, type: 2}
 --- !u!1 &6905890296100453528
 GameObject:
   m_ObjectHideFlags: 0

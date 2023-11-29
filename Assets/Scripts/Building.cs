@@ -1,6 +1,8 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -26,7 +28,14 @@ public class Building : MonoBehaviour
     protected bool approved = false;
 
     [SerializeField] SpriteRenderer[] spriteRenderers;
-    public BuildingSO data;
+
+    public BuildingData myData;
+
+    public BuildingSO buildingType;
+
+    protected List<UnitData> unitDatas = new List<UnitData>();
+
+
     protected float timer;
 
     protected void ChangeColor(Color color)
@@ -39,9 +48,30 @@ public class Building : MonoBehaviour
 
     private void OnEnable()
     {
-        AddEventToButton(MoveButton);
+        //AddEventToButton(MoveButton);
         OKButton.onClick.AddListener(BuildingApproved);
         RotateButton.onClick.AddListener(RotationClicked);
+    }
+
+    private void Awake()
+    {
+        foreach (var item in GameData.BuildingDatas)
+        {
+            if (item.type == buildingType.type)
+            {
+                buildingType.cost = item.cost;
+                buildingType.SOname = item.SOname;
+                if (buildingType.unit== null)
+                {
+                    return;
+                }
+                buildingType.unit.SOname = item.unitDatas[0].SOname;
+                buildingType.unit.AttackPoint = item.unitDatas[0].AttackPoint;
+                buildingType.unit.DefencePower = item.unitDatas[0].DefencePower;
+                buildingType.unit.Health = item.unitDatas[0].Health;
+                buildingType.unit.speed = item.unitDatas[0].speed;
+            }
+        }
     }
 
     private void RotationClicked()
@@ -56,12 +86,12 @@ public class Building : MonoBehaviour
 
     private void BuildingApproved()
     {
-        GridManager.Instance.SetTileAfterBuilding(transform.position, data.type);
+        GridManager.Instance.SetTileAfterBuilding(transform.position, buildingType.type);
 
         MoveButton.gameObject.SetActive(false);
         OKButton.gameObject.SetActive(false);
         RotateButton.gameObject.SetActive(false);
-        BuilingApprovedAction?.Invoke(data.cost);
+        BuilingApprovedAction?.Invoke(myData.cost);
         approved = true;
     }
 
@@ -85,49 +115,12 @@ public class Building : MonoBehaviour
         instantiatedUnitNumberText.text = "x" + instantiatedUnitNumber.ToString();
     }
 
-    void AddEventToButton(Button button)
-    {
-        // Check if the button already has an EventTrigger component
-        EventTrigger eventTrigger = button.GetComponent<EventTrigger>();
-        if (eventTrigger == null)
-        {
-            // If not, add it
-            eventTrigger = button.gameObject.AddComponent<EventTrigger>();
-        }
-
-        // Create an entry for the OnPointerDown event
-        EventTrigger.Entry entry = new EventTrigger.Entry();
-        entry.eventID = EventTriggerType.BeginDrag;
-
-        EventTrigger.Entry entry2 = new EventTrigger.Entry();
-        entry2.eventID = EventTriggerType.EndDrag;
-
-        EventTrigger.Entry entry3 = new EventTrigger.Entry();
-        entry3.eventID = EventTriggerType.Drag;
-
-
-        entry.callback.AddListener((data) => { OnBeginDrag((PointerEventData)data, button); });
-        entry2.callback.AddListener((data) => { OnEndDrag((PointerEventData)data, button); });
-        entry3.callback.AddListener((data) => { OnDrag((PointerEventData)data, button); });
-
-
-        // Add the entry to the event trigger
-        eventTrigger.triggers.Add(entry);
-        eventTrigger.triggers.Add(entry2);
-        eventTrigger.triggers.Add(entry3);
-    }
-
     #region DRAG
 
-    private void OnEndDrag(PointerEventData data, Button button)
-    {
-        Debug.Log("End Drag");
-        ChangeColor(AfterColor);
-    }
+    
 
-    private void OnDrag(PointerEventData data, Button button)
+    public void OnMouseDrag()
     {
-        // Convert screen space to world space
         Vector3 mousePos = Input.mousePosition;
         //mousePos.z = -Camera.main.transform.position.z;  // Adjust the Z coordinate based on the camera's distance
         Vector2 newPosition = Camera.main.ScreenToWorldPoint(mousePos);
@@ -136,11 +129,6 @@ public class Building : MonoBehaviour
         transform.DOMove(targetPos, 0.2f).SetEase(Ease.Flash);
     }
 
-    private void OnBeginDrag(PointerEventData data, Button button)
-    {
-        Debug.Log("Begin Drag");
-        ChangeColor(PreColor);
-    }
 
     #endregion
 
