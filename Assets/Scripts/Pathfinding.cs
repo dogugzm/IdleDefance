@@ -27,7 +27,7 @@ public class Pathfinding
             openSet.Remove(current);
             closedSet.Add(current);
 
-            foreach (Vector2 neighbor in GetNeighbors(current))
+            foreach (Vector2 neighbor in GetNeighbors(current, GridManager.Instance.tiles))
             {
                 if (closedSet.Contains(neighbor))
                     continue;
@@ -80,13 +80,23 @@ public class Pathfinding
         return path;
     }
 
-    private static IEnumerable<Vector2> GetNeighbors(Vector2 center)
+    private static IEnumerable<Vector2> GetNeighbors(Vector2 center, Dictionary<Vector2, Tile> tiles)
     {
-        // Assuming 4-connected neighbors for simplicity
-        yield return new Vector2(center.x + 1, center.y);
-        yield return new Vector2(center.x - 1, center.y);
-        yield return new Vector2(center.x, center.y + 1);
-        yield return new Vector2(center.x, center.y - 1);
+        int x = (int)center.x;
+        int y = (int)center.y;
+
+        if (IsValidNeighbor(x + 1, y, tiles)) yield return new Vector2(x + 1, y);
+        if (IsValidNeighbor(x - 1, y, tiles)) yield return new Vector2(x - 1, y);
+        if (IsValidNeighbor(x, y + 1, tiles)) yield return new Vector2(x, y + 1);
+        if (IsValidNeighbor(x, y - 1, tiles)) yield return new Vector2(x, y - 1);
+    }
+
+    private static bool IsValidNeighbor(int x, int y, Dictionary<Vector2, Tile> tiles)
+    {
+        Vector2 neighbor = new Vector2(x, y);
+
+        // Check if the neighbor is within the grid boundaries and does not have a building
+        return tiles.ContainsKey(neighbor) && !tiles[neighbor].hasBuilding;
     }
 }
 

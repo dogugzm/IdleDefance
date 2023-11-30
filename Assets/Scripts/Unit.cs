@@ -24,11 +24,13 @@ public class Unit : MonoBehaviour
 
         foreach (Vector2 pos in allTiles)
         {
+            Tile tile = GridManager.Instance.GetTileAtPosition(pos);
+            //tile.ChangeColor();
             transform.DOMove(pos, data.speed).SetEase(easeType);
             await Task.Delay((int)(data.speed * 1000));
             await Task.Delay(500);
         }
-
+        //allTiles.ForEach(tile => { DOTween.Kill(tile); });
     }
 
     private void OnMouseDown()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,11 +16,18 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button CompleteButton;
     [SerializeField] private Button RotateButton;
 
+    [SerializeField] private Button ChangeGridButton;
+
     #endregion
+
+    [SerializeField] private TMP_InputField WidthInput;
+    [SerializeField] private TMP_InputField HeightInput;
 
     [Header("Panels")]
     [SerializeField] private GameObject StorePanel;
     [SerializeField] private GameObject BuildingMovementPanel;
+    [SerializeField] private GameObject SettingsPanel;
+
 
     [Header("Buildings")]
     [SerializeField] private BuildingSO Building1;
@@ -28,7 +36,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI moneyText;
-
+    List<Building> instantiatedBuildings = new List<Building>();
     Building tempBuilding;
 
     private void OnEnable()
@@ -39,9 +47,26 @@ public class UIManager : MonoBehaviour
         CompleteButton.onClick.AddListener(CompleteButtonClicked);
         RotateButton.onClick.AddListener(RotateButtonClicked);
         CloseButton.onClick.AddListener(CloseButtonClicked);
+        ChangeGridButton.onClick.AddListener(OnChangeGridButtonClicked);
+
         StoreManager.UpdateMoneyText += OnBuildingBought;
         GridManager.TileClickEvent += AnyTileClicked;
     }
+
+    private void OnChangeGridButtonClicked()
+    {
+        DataLoader.ChangeGridSize(int.Parse(WidthInput.text), int.Parse(HeightInput.text));
+        SettingsPanel.SetActive(false);
+        foreach (Building building in instantiatedBuildings)
+        {
+            Destroy(building.gameObject);
+        }
+        instantiatedBuildings.Clear();
+        tempBuilding = null;
+        GridManager.RestartGame?.Invoke();
+    }
+
+
 
     private void CompleteButtonClicked()
     {
@@ -84,7 +109,8 @@ public class UIManager : MonoBehaviour
         {
             return;
         }
-        tempBuilding = Instantiate(_building.buildingPrefab,new Vector3(8,4,0f),Quaternion.identity).GetComponent<Building>();
+        tempBuilding = Instantiate(_building.buildingPrefab,new Vector3(GameData.GridData.width/2, GameData.GridData.height / 2, 0f),Quaternion.identity).GetComponent<Building>();
+        instantiatedBuildings.Add(tempBuilding);
         tempBuilding.buildingType = _building;
         BuildingMovementPanel.SetActive(true);
     }

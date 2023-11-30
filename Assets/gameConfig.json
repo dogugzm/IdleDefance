@@ -1,8 +1,4 @@
 {
-  "gridData": {
-    "width": 16,
-    "height": 9
-  },
   "buildingDatas": [
     {
       "SOname": "SingleBuilding",

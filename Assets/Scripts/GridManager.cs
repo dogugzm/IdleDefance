@@ -1,10 +1,7 @@
 
 using System;
 using System.Collections.Generic;
-using Unity.Collections;
-using UnityEditor.SceneTemplate;
 using UnityEngine;
-using UnityEngine.Events;
 
 
 public class GridManager : MonoBehaviour
@@ -15,18 +12,30 @@ public class GridManager : MonoBehaviour
 
     Unit clickedUnit = null;
 
-    public static Action<int,int> TileClickEvent;
+    public static Action<int, int> TileClickEvent;
     public static Action<Unit> UnitClickEvent;
+    public static Action RestartGame;
+
 
     public static GridManager Instance;
 
     public Dictionary<Vector2, Tile> tiles;
+    List<Tile> instantiatedTileList = new();
+    List<Enemy> instantiatedEnemyList = new();
+
+
+
+
+
+
 
     private void OnEnable()
     {
         TileClickEvent += OnTileClicked;
 
         UnitClickEvent += OnUnitClicked;
+
+        RestartGame += StartGame;
     }
 
     private void Awake()
@@ -42,8 +51,8 @@ public class GridManager : MonoBehaviour
     private void OnUnitClicked(Unit unit)
     {
         clickedUnit = unit;
-        
-        
+
+
 
     }
 
@@ -55,66 +64,75 @@ public class GridManager : MonoBehaviour
         }
 
         //TODO: if enemy on that tile ? fight : move.
-        clickedUnit.MoveTowardsTile(new Vector2(arg1,arg2));
+        clickedUnit.MoveTowardsTile(new Vector2(arg1, arg2));
 
     }
 
     void Start()
     {
-        GenerateGrid(GameData.GridData.width,GameData.GridData.height);      
+        StartGame();
+    }
+
+    public void StartGame()
+    {
+        foreach (var item in instantiatedTileList)
+        {
+            Destroy(item?.gameObject);
+        }
+        foreach (var item in instantiatedEnemyList)
+        {
+            Destroy(item?.gameObject);
+        }
+
+        GenerateGrid(GameData.GridData.width, GameData.GridData.height);
+
+
     }
 
     void GenerateGrid(int width, int height)
     {
         tiles = new Dictionary<Vector2, Tile>();
+        instantiatedTileList.Clear();
+        instantiatedEnemyList.Clear();
 
         int random_j = UnityEngine.Random.Range(0, height);
         int random_i = UnityEngine.Random.Range(0, width / 2);
 
         for (int i = 0; i < width; i++)
         {
-            for(int j = 0; j < height; j++)
+            for (int j = 0; j < height; j++)
             {
-                var generatedTile = Instantiate(tilePreafab, new Vector2(i,j),Quaternion.identity);
+                var generatedTile = Instantiate(tilePreafab, new Vector2(i, j), Quaternion.identity);
                 generatedTile.name = $"Tile {i}{j}";
                 generatedTile.transform.parent = transform;
+                instantiatedTileList.Add(generatedTile.GetComponent<Tile>());
 
-                if (i < width/2)
+                if (i < width / 2)
                 {
                     generatedTile.GetComponent<Tile>().isEnemySide = true;
                 }
 
-                if ( i == random_i && j == random_j)
+                if (i == random_i && j == random_j)
                 {
                     Debug.Log(new Vector2(i, j));
-                    var generatedEnemy = Instantiate(EnemyPrefab, new Vector2(i, j) , Quaternion.identity);
-
+                    var generatedEnemy = Instantiate(EnemyPrefab, new Vector2(i, j), Quaternion.identity);
+                    instantiatedEnemyList.Add(generatedEnemy.GetComponent<Enemy>());
                 }
 
                 bool isOffset = (i % 2 == 0 && j % 2 == 1) || (i % 2 == 1 && j % 2 == 0);
 
-                generatedTile.GetComponent<Tile>().Initialize(isOffset,i,j);
+                generatedTile.GetComponent<Tile>().Initialize(isOffset, i, j);
 
                 tiles[new Vector2(i, j)] = generatedTile.GetComponent<Tile>();
 
-            } 
+            }
         }
 
         cam.transform.position = new Vector3((float)width / 2 - 0.5f, (float)height / 2 - 0.5f, -10);
+
+        cam.orthographicSize = Mathf.Max(width, height) / 2 + 1;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            List<Vector2> paths =  Pathfinding.FindPath(new Vector2(0, 0), new Vector2(8, 5));
-            foreach (var path in paths)
-            {
-                Tile tile = GetTileAtPosition(path);
-                tile.ChangeColor();
-            }
-        }
-    }
 
     public Tile GetTileAtPosition(Vector2 pos)
     {
@@ -135,10 +153,10 @@ public class GridManager : MonoBehaviour
                 tile.hasBuilding = true;
                 break;
             case BuildingTypes.MULTIPLE:
-                List<Tile> tiles = new List<Tile>(); 
+                List<Tile> tiles = new List<Tile>();
                 tiles.Add(tile);
-                tiles.Add(GetTileAtPosition(new Vector2(pos.x + 1 , pos.y)));
-                tiles.Add(GetTileAtPosition(new Vector2(pos.x , pos.y + 1)));
+                tiles.Add(GetTileAtPosition(new Vector2(pos.x + 1, pos.y)));
+                tiles.Add(GetTileAtPosition(new Vector2(pos.x, pos.y + 1)));
                 tiles.Add(GetTileAtPosition(new Vector2(pos.x + 1, pos.y + 1)));
                 foreach (var item in tiles)
                 {

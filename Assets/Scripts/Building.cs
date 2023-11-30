@@ -2,9 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 //TODO: inheritance for all building types.
@@ -47,7 +45,7 @@ public class Building : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         //AddEventToButton(MoveButton);
         OKButton.onClick.AddListener(BuildingApproved);

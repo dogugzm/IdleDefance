@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -8,6 +9,8 @@ public class Tile : MonoBehaviour
     [SerializeField] Color offsetColorE;
     SpriteRenderer spriteRenderer;
     public int x, y;
+
+    public Tween AlpaTween;
 
     public bool hasBuilding = false;
     public bool isEnemySide = false;
@@ -33,8 +36,13 @@ public class Tile : MonoBehaviour
 
     public void ChangeColor()
     {
-        spriteRenderer.color = Color.black;
+        AlpaTween = spriteRenderer.DOFade(0.5f, 1f).SetLoops(-1,LoopType.Yoyo);
     }
+
+    //public void ChangeColor()
+    //{
+    //    spriteRenderer.color = Color.black;
+    //}
 
     private void OnMouseDown()
     {

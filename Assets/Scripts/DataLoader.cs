@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using UnityEngine;
 
@@ -34,51 +35,62 @@ public class UnitData
 [System.Serializable]
 public class GameConfig 
 {
-    public GridData gridData;
+    //public GridData gridData;
     public List<BuildingData> buildingDatas;
     //public List<UnitData> unitDatas;
 }
 
 public class DataLoader : MonoBehaviour
 {
-    public string configFilePath = "Assets/config.json";
 
     void Start()
     {
         CreateJsonFile();
-
         LoadJsonFile();
     }
 
     void LoadJsonFile()
     {
-        string filePath = Application.dataPath + "/gameConfig.json";
 
-        string json = System.IO.File.ReadAllText(filePath);
+        string filePath = Path.Combine(Application.persistentDataPath, "gameConfig.json");
+        string filePathGrid = Path.Combine(Application.persistentDataPath, "gameConfigGrid.json");
 
-        GameConfig gameConfig = JsonConvert.DeserializeObject<GameConfig>(json);
 
-        GameData.GridData = gameConfig.gridData;
-        //GameData.unitDatas = gameConfig.unitDatas;
+        string jsonBuilding = System.IO.File.ReadAllText(filePath);
+        string jsonGrid = System.IO.File.ReadAllText(filePathGrid);
+
+        GameConfig gameConfig = JsonConvert.DeserializeObject<GameConfig>(jsonBuilding);
+        GridData gridConfig = JsonConvert.DeserializeObject<GridData>(jsonGrid);
         GameData.BuildingDatas = gameConfig.buildingDatas;
+        GameData.GridData = gridConfig;
 
-        //Debug.Log("Grid Width: " + gameConfig.gridData.width);
-        //Debug.Log("Building Count: " + gameConfig.buildingDatas.Count);
-        //Debug.Log("Unit Count: " + gameConfig.unitDatas.Count);
-
-        //if (gameConfig.buildingDatas.Count > 0)
-        //{
-        //    BuildingData firstBuilding = gameConfig.buildingDatas[0];
-        //    Debug.Log("First Building Name: " + firstBuilding.SOname);
-        //}
-
-        //if (gameConfig.unitDatas.Count > 0)
-        //{
-        //    UnitData firstUnit = gameConfig.unitDatas[0];
-        //    Debug.Log("First Unit Name: " + firstUnit.SOname);
-        //}
     }
 
+    /// <summary>
+    /// Changes and push json file
+    /// </summary>
+    /// <param name="_width"></param>
+    /// <param name="_height"></param>
+    public static void ChangeGridSize(int _width , int _height)
+    {
+        GameData.GridData.width = _width;
+        GameData.GridData.height = _height;
+
+        GridData gridConfig = new GridData
+        {
+            width = _width,
+            height = _height,
+        };
+
+        string jsonGrid = JsonConvert.SerializeObject(gridConfig, Newtonsoft.Json.Formatting.Indented);
+        string filePathGrid = Path.Combine(Application.persistentDataPath, "gameConfigGrid.json");
+        System.IO.File.WriteAllText(filePathGrid, jsonGrid);
+       
+    }
+
+    /// <summary>
+    /// for initial writing for testing purposes
+    /// </summary>
     void CreateJsonFile()
     {
         List<UnitData> unitDataListForSingle = new List<UnitData>
@@ -98,19 +110,33 @@ public class DataLoader : MonoBehaviour
 
         GameConfig gameConfig = new GameConfig
         {
-            gridData = new GridData { width = 16, height = 9},
+            //gridData = new GridData { width = 16, height = 9},
             buildingDatas = buildingDataList,
+            //unitDatas = unitDataList
+        };
+
+        GridData gridConfig = new GridData
+        {
+            //gridData = new GridData { width = 16, height = 9},
+            width = 16,
+            height = 9,
             //unitDatas = unitDataList
         };
 
         // Convert the object to JSON
         string json = JsonConvert.SerializeObject(gameConfig, Newtonsoft.Json.Formatting.Indented);
+        string jsonGrid = JsonConvert.SerializeObject(gridConfig, Newtonsoft.Json.Formatting.Indented);
+
 
         // Specify the file path (you can adjust this path as needed)
-        string filePath = Application.dataPath + "/gameConfig.json";
+        string filePath = Path.Combine(Application.persistentDataPath, "gameConfig.json");
+        string filePathGrid = Path.Combine(Application.persistentDataPath, "gameConfigGrid.json");
+
 
         // Write the JSON to a file
         System.IO.File.WriteAllText(filePath, json);
+        System.IO.File.WriteAllText(filePathGrid, jsonGrid);
+
 
         //Debug.Log("JSON file created: " + filePath);
     }

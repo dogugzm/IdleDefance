@@ -7,6 +7,12 @@ public class MultiBuilding : Building
     //[SerializeField] UnitSO[] units;
     List<Unit> instantiatedUnits = new();
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        GridManager.RestartGame += ClearUnits;
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -26,11 +32,18 @@ public class MultiBuilding : Building
         }
     }
 
+    void ClearUnits()
+    {
+        foreach (Unit unit in instantiatedUnits)
+        {
+            Destroy(unit.gameObject);
+        }
+    }
+
     protected override void CreateUnit()
     {
         base.CreateUnit();     
-        GameObject instantiatedUnit = Instantiate(Resources.Load<GameObject>(buildingType.unit.SOname), transform.position, Quaternion.identity);
-       
+        GameObject instantiatedUnit = Instantiate(Resources.Load<GameObject>(buildingType.unit.SOname), transform.position, Quaternion.identity);     
         instantiatedUnit.GetComponent<Unit>().building = this;
         instantiatedUnits.Add(instantiatedUnit.GetComponent<Unit>());
         //instantiatedUnit.GetComponent<Unit>().targetVector = new Vector2(0, 8);
