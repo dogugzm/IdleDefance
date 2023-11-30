@@ -24,27 +24,20 @@ public class Building : MonoBehaviour
 
     public static Action<int> BuilingApprovedAction;
 
-    protected bool approved = false;
-
     [SerializeField] SpriteRenderer[] spriteRenderers;
 
-    public BuildingData myData;
 
+    public BuildingData myData;
     public BuildingSO buildingType;
+
 
     protected List<UnitData> unitDatas = new List<UnitData>();
 
+    public List<Tile> coveredTile = new();
+
     bool isRotating = false;
-
+    protected bool approved = false;
     protected float timer;
-
-    protected void ChangeColor(Color color)
-    {
-        foreach (var sprite in spriteRenderers)
-        {
-            sprite.color = color;
-        }
-    }
 
     protected virtual void Awake()
     {
@@ -68,16 +61,6 @@ public class Building : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-        ChangeColor(PreColor);
-        foreach (var item in spriteRenderers)
-        {
-            item.DOFade(0.5f, 0.5f).SetLoops(-1,LoopType.Yoyo);
-        }
-    }
-
-
     protected virtual void OnEnable()
     {
         //AddEventToButton(MoveButton);
@@ -86,6 +69,44 @@ public class Building : MonoBehaviour
         RotateButton.onClick.AddListener(RotationClicked);
     }
     
+    private void Start()
+    {
+        ChangeColor(PreColor);
+        GetTilesAtAllPositionsOfBuildings();
+        foreach (var item in spriteRenderers)
+        {
+            item.DOFade(0.5f, 0.5f).SetLoops(-1,LoopType.Yoyo);
+        }
+
+    }
+
+    protected void ChangeColor(Color color)
+    {
+        foreach (var sprite in spriteRenderers)
+        {
+            sprite.color = color;
+        }
+    }
+
+    void SetTilesAtAllPositionsOfBuildings()
+    {      
+        foreach (var tile in coveredTile)
+        {
+            tile.hasBuilding = true;
+        }
+    }
+
+    void GetTilesAtAllPositionsOfBuildings()
+    {
+        coveredTile.Clear();
+        foreach (var sprite in spriteRenderers)
+        {
+            Tile tile = GridManager.Instance.GetTileAtPosition(sprite.transform.position);
+            coveredTile.Add(tile);
+        }
+    }
+
+
 
     public void RotationClicked()
     {
@@ -93,19 +114,21 @@ public class Building : MonoBehaviour
         {
             return;
         }
+        GetTilesAtAllPositionsOfBuildings();
         isRotating = true;
         Rotatable.DORotate(new Vector3(0, 0, -90), 0.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutElastic).OnComplete(() => isRotating = false);
     }
 
     public void BuildingApproved()
     {
+        //control 
+
         DOTween.KillAll();
         foreach (var item in spriteRenderers)
         {
             item.DOFade(1f, 1f);
         }
-        GridManager.Instance.SetTileAfterBuilding(transform.position, buildingType.type);
-
+        SetTilesAtAllPositionsOfBuildings();
         MoveButton.gameObject.SetActive(false);
         OKButton.gameObject.SetActive(false);
         RotateButton.gameObject.SetActive(false);
@@ -132,10 +155,18 @@ public class Building : MonoBehaviour
 
     #region DRAG
 
+    private void OnMouseUp()
+    {
+        
+    }
+
     public void OnMouseDrag()
     {
+        if (approved)
+        {
+            return;
+        }
         Vector3 mousePos = Input.mousePosition;
-        //mousePos.z = -Camera.main.transform.position.z;  // Adjust the Z coordinate based on the camera's distance
         Vector2 newPosition = Camera.main.ScreenToWorldPoint(mousePos);
        
 
@@ -157,7 +188,7 @@ public class Building : MonoBehaviour
         }
 
         Vector3 targetPos = new Vector3(Mathf.RoundToInt(newPosition.x), Mathf.RoundToInt(newPosition.y), -1);
-        transform.DOMove(targetPos, 0.2f).SetEase(Ease.Flash);
+        transform.DOMove(targetPos, 0.2f).SetEase(Ease.Flash).OnComplete(GetTilesAtAllPositionsOfBuildings);
 
 
     }

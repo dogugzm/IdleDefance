@@ -62,6 +62,7 @@ public class GridManager : MonoBehaviour
 
         //TODO: if enemy on that tile ? fight : move.
         clickedUnit.MoveTowardsTile(new Vector2(arg1, arg2));
+        clickedUnit = null;
     }
     #endregion
 
@@ -123,7 +124,6 @@ public class GridManager : MonoBehaviour
         cam.orthographicSize = Mathf.Max(width, height) / 2 + 1;
     }
 
-
     public Tile GetTileAtPosition(Vector2 pos)
     {
         if (tiles.TryGetValue(pos, out var tile))
@@ -132,49 +132,5 @@ public class GridManager : MonoBehaviour
         }
         return null;
     }
-
-    //TODO: refactor
-    public void SetTileAfterBuilding(Vector2 pos, BuildingTypes type)
-    {
-        Tile tile = GetTileAtPosition(pos);
-
-        switch (type)
-        {
-            case BuildingTypes.SINGLE:
-                tile.hasBuilding = true;
-                break;
-            case BuildingTypes.MULTIPLE:
-                List<Tile> tiles = new List<Tile>();
-                tiles.Add(tile);
-                tiles.Add(GetTileAtPosition(new Vector2(pos.x + 1, pos.y)));
-                tiles.Add(GetTileAtPosition(new Vector2(pos.x, pos.y + 1)));
-                tiles.Add(GetTileAtPosition(new Vector2(pos.x + 1, pos.y + 1)));
-                foreach (var item in tiles)
-                {
-                    item.hasBuilding = true;
-                }
-                break;
-            case BuildingTypes.L:
-                //TODO: ROTATION DATA WILL ADD
-                List<Tile> tilesL = new List<Tile>();
-                tilesL.Add(tile);
-                tilesL.Add(GetTileAtPosition(new Vector2(pos.x + 1, pos.y)));
-                tilesL.Add(GetTileAtPosition(new Vector2(pos.x, pos.y + 1)));
-                tilesL.Add(GetTileAtPosition(new Vector2(pos.x, pos.y + 2)));
-                foreach (var item in tilesL)
-                {
-                    item.hasBuilding = true;
-                }
-                break;
-            default:
-                break;
-        }
-
-    }
-
-
-
-
-
 
 }

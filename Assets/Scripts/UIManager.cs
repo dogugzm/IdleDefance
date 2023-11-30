@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,10 +67,19 @@ public class UIManager : MonoBehaviour
         GridManager.RestartGame?.Invoke();
     }
 
-
-
     private void CompleteButtonClicked()
     {
+        //if (tempBuilding.coveredTile.Any(item => item.hasBuilding == true))
+        //{
+        //    return;
+        //}
+        foreach (Tile tile in tempBuilding.coveredTile)
+        {
+            if (tile.hasBuilding == true)
+            {
+                return;
+            }
+        }
         tempBuilding.BuildingApproved();
         tempBuilding = null;
         BuildingMovementPanel.SetActive(false);
