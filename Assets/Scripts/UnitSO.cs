@@ -12,4 +12,7 @@ public class UnitSO : ScriptableObject
     public float speed;
     public GameObject prefab;
 
+
+   
+
 }

@@ -13,6 +13,13 @@ public class MultiBuilding : Building
         GridManager.RestartGame += ClearUnits;
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        xLimit = GameData.GridData.width - 2;
+        yLimit = GameData.GridData.height - 2;
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -46,7 +53,6 @@ public class MultiBuilding : Building
         GameObject instantiatedUnit = Instantiate(Resources.Load<GameObject>(buildingType.unit.SOname), transform.position, Quaternion.identity);     
         instantiatedUnit.GetComponent<Unit>().building = this;
         instantiatedUnits.Add(instantiatedUnit.GetComponent<Unit>());
-        //instantiatedUnit.GetComponent<Unit>().targetVector = new Vector2(0, 8);
     }
 
 }

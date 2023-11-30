@@ -1,8 +1,6 @@
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
 using UnityEngine;
 
 
@@ -33,7 +31,7 @@ public class UnitData
 }
 
 [System.Serializable]
-public class GameConfig 
+public class GameConfig
 {
     //public GridData gridData;
     public List<BuildingData> buildingDatas;
@@ -71,7 +69,7 @@ public class DataLoader : MonoBehaviour
     /// </summary>
     /// <param name="_width"></param>
     /// <param name="_height"></param>
-    public static void ChangeGridSize(int _width , int _height)
+    public static void ChangeGridSize(int _width, int _height)
     {
         GameData.GridData.width = _width;
         GameData.GridData.height = _height;
@@ -85,7 +83,7 @@ public class DataLoader : MonoBehaviour
         string jsonGrid = JsonConvert.SerializeObject(gridConfig, Newtonsoft.Json.Formatting.Indented);
         string filePathGrid = Path.Combine(Application.persistentDataPath, "gameConfigGrid.json");
         System.IO.File.WriteAllText(filePathGrid, jsonGrid);
-       
+
     }
 
     /// <summary>
@@ -96,7 +94,7 @@ public class DataLoader : MonoBehaviour
         List<UnitData> unitDataListForSingle = new List<UnitData>
         {
             new UnitData { SOname = "Yaya1", AttackPoint = 20, Health = 100, DefencePower = 10, speed = 0.3f},
-            new UnitData { SOname = "Yaya2", AttackPoint = 30, Health = 120, DefencePower = 15, speed = 0.4f},        
+            new UnitData { SOname = "Yaya2", AttackPoint = 30, Health = 120, DefencePower = 15, speed = 0.4f},
         };
 
         List<BuildingData> buildingDataList = new List<BuildingData>
@@ -118,8 +116,8 @@ public class DataLoader : MonoBehaviour
         GridData gridConfig = new GridData
         {
             //gridData = new GridData { width = 16, height = 9},
-            width = 16,
-            height = 9,
+            width = 15,
+            height = 15,
             //unitDatas = unitDataList
         };
 

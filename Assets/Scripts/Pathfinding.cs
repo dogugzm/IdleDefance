@@ -95,7 +95,6 @@ public class Pathfinding
     {
         Vector2 neighbor = new Vector2(x, y);
 
-        // Check if the neighbor is within the grid boundaries and does not have a building
         return tiles.ContainsKey(neighbor) && !tiles[neighbor].hasBuilding;
     }
 }

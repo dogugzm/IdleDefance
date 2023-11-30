@@ -10,8 +10,6 @@ public class Tile : MonoBehaviour
     SpriteRenderer spriteRenderer;
     public int x, y;
 
-    public Tween AlpaTween;
-
     public bool hasBuilding = false;
     public bool isEnemySide = false;
 
@@ -33,16 +31,6 @@ public class Tile : MonoBehaviour
         x = _x;
         y = _y;
     }
-
-    public void ChangeColor()
-    {
-        AlpaTween = spriteRenderer.DOFade(0.5f, 1f).SetLoops(-1,LoopType.Yoyo);
-    }
-
-    //public void ChangeColor()
-    //{
-    //    spriteRenderer.color = Color.black;
-    //}
 
     private void OnMouseDown()
     {

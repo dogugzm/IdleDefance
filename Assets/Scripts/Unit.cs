@@ -13,11 +13,16 @@ public class Unit : MonoBehaviour
     [HideInInspector] public Building building;
     [SerializeField] SpriteRenderer spriteRenderer;
 
-    //public Vector2 targetVector;
+    public bool isMoving;
 
-    [ContextMenu("a")]
+    private void Start()
+    {
+        isMoving = false;
+    }
+
     public async void MoveTowardsTile(Vector2 target)
     {
+        isMoving = true;
         building?.RemoveUnit();
         spriteRenderer.DOFade(1f, 0.5f);
         List<Vector2> allTiles = Pathfinding.FindPath(new Vector2(transform.position.x, transform.position.y), target);
@@ -25,16 +30,19 @@ public class Unit : MonoBehaviour
         foreach (Vector2 pos in allTiles)
         {
             Tile tile = GridManager.Instance.GetTileAtPosition(pos);
-            //tile.ChangeColor();
             transform.DOMove(pos, data.speed).SetEase(easeType);
             await Task.Delay((int)(data.speed * 1000));
             await Task.Delay(500);
         }
-        //allTiles.ForEach(tile => { DOTween.Kill(tile); });
+        isMoving = false;
     }
 
     private void OnMouseDown()
     {
+        if (isMoving)
+        {
+            return;     
+        }
         spriteRenderer.DOFade(0.5f, 0.5f);
         GridManager.UnitClickEvent?.Invoke(this);     
     }

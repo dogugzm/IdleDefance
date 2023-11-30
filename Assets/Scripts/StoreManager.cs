@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StoreManager : MonoBehaviour
@@ -18,7 +16,6 @@ public class StoreManager : MonoBehaviour
     {
         Building.BuilingApprovedAction += BuyBuilding;
         SingleBuilding.AddMoneyOnEveryXSecond += GainMoney;
-
     }
 
     public void BuyBuilding(int cost)
@@ -31,7 +28,6 @@ public class StoreManager : MonoBehaviour
     {
         currentMoney += 10;
         UpdateMoneyText.Invoke(currentMoney);
-
     }
 
 

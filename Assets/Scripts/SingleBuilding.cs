@@ -1,14 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SingleBuilding : Building
 {
-
     public static Action AddMoneyOnEveryXSecond;
 
-
+    protected override void Awake()
+    {
+        base.Awake();
+        xLimit = GameData.GridData.width - 1;
+        yLimit = GameData.GridData.height - 1;
+    }
 
     protected override void Update()
     {
@@ -24,7 +26,7 @@ public class SingleBuilding : Building
             AddMoneyOnEveryXSecond.Invoke();
             timer = 0;
         }
-        
+
     }
 
 }

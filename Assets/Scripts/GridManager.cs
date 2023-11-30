@@ -23,21 +23,6 @@ public class GridManager : MonoBehaviour
     List<Tile> instantiatedTileList = new();
     List<Enemy> instantiatedEnemyList = new();
 
-
-
-
-
-
-
-    private void OnEnable()
-    {
-        TileClickEvent += OnTileClicked;
-
-        UnitClickEvent += OnUnitClicked;
-
-        RestartGame += StartGame;
-    }
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -48,12 +33,24 @@ public class GridManager : MonoBehaviour
         Instance = this;
     }
 
+    private void OnEnable()
+    {
+        TileClickEvent += OnTileClicked;
+
+        UnitClickEvent += OnUnitClicked;
+
+        RestartGame += StartGame;
+    }
+
+    void Start()
+    {
+        StartGame();
+    }
+    #region EVENTS
+
     private void OnUnitClicked(Unit unit)
     {
         clickedUnit = unit;
-
-
-
     }
 
     private void OnTileClicked(int arg1, int arg2)
@@ -65,13 +62,8 @@ public class GridManager : MonoBehaviour
 
         //TODO: if enemy on that tile ? fight : move.
         clickedUnit.MoveTowardsTile(new Vector2(arg1, arg2));
-
     }
-
-    void Start()
-    {
-        StartGame();
-    }
+    #endregion
 
     public void StartGame()
     {
@@ -85,8 +77,6 @@ public class GridManager : MonoBehaviour
         }
 
         GenerateGrid(GameData.GridData.width, GameData.GridData.height);
-
-
     }
 
     void GenerateGrid(int width, int height)
@@ -143,6 +133,7 @@ public class GridManager : MonoBehaviour
         return null;
     }
 
+    //TODO: refactor
     public void SetTileAfterBuilding(Vector2 pos, BuildingTypes type)
     {
         Tile tile = GetTileAtPosition(pos);

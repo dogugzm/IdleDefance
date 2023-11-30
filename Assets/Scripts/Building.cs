@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-//TODO: inheritance for all building types.
 public class Building : MonoBehaviour
 {
     [SerializeField] Button MoveButton;
@@ -16,6 +15,8 @@ public class Building : MonoBehaviour
     [SerializeField] Color AfterColor;
 
     [SerializeField] Transform Rotatable;
+
+    protected int xLimit, yLimit;
 
     public Image loadingImage;
     public TextMeshProUGUI instantiatedUnitNumberText;
@@ -45,14 +46,7 @@ public class Building : MonoBehaviour
         }
     }
 
-    protected virtual void OnEnable()
-    {
-        //AddEventToButton(MoveButton);
-        OKButton.onClick.AddListener(BuildingApproved);
-        RotateButton.onClick.AddListener(RotationClicked);
-    }
-
-    private void Awake()
+    protected virtual void Awake()
     {
         foreach (var item in GameData.BuildingDatas)
         {
@@ -72,10 +66,25 @@ public class Building : MonoBehaviour
             }
         }
 
-        
-
     }
 
+    private void Start()
+    {
+        ChangeColor(PreColor);
+        foreach (var item in spriteRenderers)
+        {
+            item.DOFade(0.5f, 0.5f).SetLoops(-1,LoopType.Yoyo);
+        }
+    }
+
+
+    protected virtual void OnEnable()
+    {
+        //AddEventToButton(MoveButton);
+        //TODO: remove listener ondisable
+        OKButton.onClick.AddListener(BuildingApproved);
+        RotateButton.onClick.AddListener(RotationClicked);
+    }
     
 
     public void RotationClicked()
@@ -86,15 +95,6 @@ public class Building : MonoBehaviour
         }
         isRotating = true;
         Rotatable.DORotate(new Vector3(0, 0, -90), 0.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutElastic).OnComplete(() => isRotating = false);
-    }
-
-    private void Start()
-    {
-        ChangeColor(PreColor);
-        foreach (var item in spriteRenderers)
-        {
-            item.DOFade(0.5f, 0.5f).SetLoops(-1,LoopType.Yoyo);
-        }
     }
 
     public void BuildingApproved()
@@ -115,10 +115,7 @@ public class Building : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!approved)
-        {
-            return;
-        }
+           
     }
 
     protected virtual void CreateUnit()
@@ -135,16 +132,34 @@ public class Building : MonoBehaviour
 
     #region DRAG
 
-    
-
     public void OnMouseDrag()
     {
         Vector3 mousePos = Input.mousePosition;
         //mousePos.z = -Camera.main.transform.position.z;  // Adjust the Z coordinate based on the camera's distance
         Vector2 newPosition = Camera.main.ScreenToWorldPoint(mousePos);
+       
+
+        if (newPosition.x > xLimit)
+        {
+            newPosition.x = xLimit;
+        }
+        else if (newPosition.x < 0)
+        {
+            newPosition.x = 0;
+        }
+        if (newPosition.y > yLimit)
+        {
+            newPosition.y = yLimit;
+        }
+        else if (newPosition.y < 0)
+        {
+            newPosition.y = 0;
+        }
 
         Vector3 targetPos = new Vector3(Mathf.RoundToInt(newPosition.x), Mathf.RoundToInt(newPosition.y), -1);
         transform.DOMove(targetPos, 0.2f).SetEase(Ease.Flash);
+
+
     }
 
 
