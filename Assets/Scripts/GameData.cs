@@ -6,6 +6,6 @@ public class GameData
 {
     public static GridData GridData;
     public static List<BuildingData> BuildingDatas;
-    public static List<UnitData> unitDatas; 
+    //public static List<UnitData> unitDatas; 
 
 }

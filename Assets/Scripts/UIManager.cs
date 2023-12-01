@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +38,12 @@ public class UIManager : MonoBehaviour
 
     [Header("Texts")]
     [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI popUpText;
+
     List<Building> instantiatedBuildings = new List<Building>();
     Building tempBuilding;
+
+    bool isPopUpActive = false;
 
     private void OnEnable()
     {
@@ -52,19 +57,52 @@ public class UIManager : MonoBehaviour
 
         StoreManager.UpdateMoneyText += OnBuildingBought;
         GridManager.TileClickEvent += AnyTileClicked;
+        GridManager.UnitClickEvent += AnyUnitClicked;
+
+    }
+
+    private void AnyUnitClicked(Unit unit)
+    {
+        SetPopUpText("Click Any Tile To Move Unit");
+    }
+
+    private void OnDisable()
+    {
+        BuildingSingleTypeButton.onClick.RemoveListener(delegate { OnBuildingBuyClicked(Building1); });
+        BuildingMultiTypeButton.onClick.RemoveListener(delegate { OnBuildingBuyClicked(Building2); });
+        BuildingLTypeButton.onClick.RemoveListener(delegate { OnBuildingBuyClicked(Building3); });
+        CompleteButton.onClick.RemoveListener(CompleteButtonClicked);
+        RotateButton.onClick.RemoveListener(RotateButtonClicked);
+        CloseButton.onClick.RemoveListener(CloseButtonClicked);
+        ChangeGridButton.onClick.RemoveListener(OnChangeGridButtonClicked);
+
+        StoreManager.UpdateMoneyText -= OnBuildingBought;
+        GridManager.TileClickEvent -= AnyTileClicked;
+        GridManager.UnitClickEvent -= AnyUnitClicked;
+
     }
 
     private void OnChangeGridButtonClicked()
     {
-        DataLoader.ChangeGridSize(int.Parse(WidthInput.text), int.Parse(HeightInput.text));
+        int width, height;
+        width = int.Parse(WidthInput.text);
+        height = int.Parse(HeightInput.text);
+
+        if (width > 20 || height > 20)
+        {
+            width = 20;
+            height = 20;
+        }
+
+        DataLoader.ChangeGridSize(width, height);
         SettingsPanel.SetActive(false);
+        GridManager.RestartGame?.Invoke();
         foreach (Building building in instantiatedBuildings)
         {
             Destroy(building.gameObject);
         }
         instantiatedBuildings.Clear();
         tempBuilding = null;
-        GridManager.RestartGame?.Invoke();
     }
 
     private void CompleteButtonClicked()
@@ -93,6 +131,7 @@ public class UIManager : MonoBehaviour
     private void OnBuildingBought(int data)
     {
         //CloseButtonClicked();
+
         moneyText.text = "Money:  " + data;
     }
 
@@ -119,10 +158,29 @@ public class UIManager : MonoBehaviour
         {
             return;
         }
+        if (StoreManager.Instance.currentMoney<_building.cost)
+        {
+            return;
+        }
         tempBuilding = Instantiate(_building.buildingPrefab,new Vector3(GameData.GridData.width/2, GameData.GridData.height / 2, 0f),Quaternion.identity).GetComponent<Building>();
         instantiatedBuildings.Add(tempBuilding);
         tempBuilding.buildingType = _building;
         BuildingMovementPanel.SetActive(true);
+    }
+
+    void SetPopUpText(string text)
+    {
+        if (isPopUpActive)
+        {
+            return;
+        }
+        isPopUpActive = true;
+        popUpText.text = text; 
+        popUpText.DOFade(1, 1f).OnComplete(() =>      
+        { 
+            popUpText.DOFade(0, 2f).OnComplete(() => isPopUpActive = false);
+            
+        } );
     }
 
     #endregion

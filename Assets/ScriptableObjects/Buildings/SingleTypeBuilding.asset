@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b005daf2553e780498deb26cb851e72e, type: 3}
   m_Name: SingleTypeBuilding
   m_EditorClassIdentifier: 
-  SOname: SINGLE
+  SOname: SingleBuilding
   cost: 100
   type: 0
   buildingPrefab: {fileID: 6824176305457555424, guid: f4cea070a01c1a040ac8b9e4242d9683, type: 3}
+  units: []

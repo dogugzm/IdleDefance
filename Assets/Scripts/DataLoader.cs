@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -91,18 +91,27 @@ public class DataLoader : MonoBehaviour
     /// </summary>
     void CreateJsonFile()
     {
-        List<UnitData> unitDataListForSingle = new List<UnitData>
+        List<UnitData> unitDataListForMultiple = new List<UnitData>
         {
             new UnitData { SOname = "Yaya1", AttackPoint = 20, Health = 100, DefencePower = 10, speed = 0.3f},
             new UnitData { SOname = "Yaya2", AttackPoint = 30, Health = 120, DefencePower = 15, speed = 0.4f},
         };
 
+        List<UnitData> unitDataListForL = new List<UnitData>
+        {
+            new UnitData { SOname = "Atlı1", AttackPoint = 20, Health = 100, DefencePower = 10, speed = 0.3f},
+            new UnitData { SOname = "Atlı2", AttackPoint = 30, Health = 120, DefencePower = 15, speed = 0.4f},
+            new UnitData { SOname = "Atlı3", AttackPoint = 30, Health = 120, DefencePower = 15, speed = 0.4f},
+
+        };
+
+        List<UnitData> unitDataListForSingle = new();
+
         List<BuildingData> buildingDataList = new List<BuildingData>
         {
-            new BuildingData { SOname = "SingleBuilding", cost = 100, type = BuildingTypes.SINGLE },
-            new BuildingData { SOname = "MultiBuilding", cost = 200, type = BuildingTypes.MULTIPLE, unitDatas = unitDataListForSingle },
-            new BuildingData { SOname = "LBuilding", cost = 300, type = BuildingTypes.L },
-
+            new BuildingData { SOname = "SingleBuilding", cost = 100, type = BuildingTypes.SINGLE,unitDatas = unitDataListForSingle },
+            new BuildingData { SOname = "MultiBuilding", cost = 200, type = BuildingTypes.MULTIPLE, unitDatas = unitDataListForMultiple },
+            new BuildingData { SOname = "LBuilding", cost = 300, type = BuildingTypes.L , unitDatas = unitDataListForL},
         };
 
 

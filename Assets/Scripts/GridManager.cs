@@ -7,21 +7,20 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     [SerializeField] private GameObject tilePreafab;
-    [SerializeField] private GameObject EnemyPrefab;
+    //[SerializeField] private GameObject EnemyPrefab;
     [SerializeField] private Camera cam;
 
-    Unit clickedUnit = null;
+    public Unit clickedUnit = null;
 
     public static Action<int, int> TileClickEvent;
     public static Action<Unit> UnitClickEvent;
     public static Action RestartGame;
 
-
     public static GridManager Instance;
 
     public Dictionary<Vector2, Tile> tiles;
     List<Tile> instantiatedTileList = new();
-    List<Enemy> instantiatedEnemyList = new();
+    //List<Enemy> instantiatedEnemyList = new();
 
     private void Awake()
     {
@@ -35,11 +34,21 @@ public class GridManager : MonoBehaviour
 
     private void OnEnable()
     {
+        
         TileClickEvent += OnTileClicked;
 
         UnitClickEvent += OnUnitClicked;
 
         RestartGame += StartGame;
+    }
+
+    private void OnDisable()
+    {
+        TileClickEvent -= OnTileClicked;
+
+        UnitClickEvent -= OnUnitClicked;
+
+        RestartGame -= StartGame;
     }
 
     void Start()
@@ -51,6 +60,12 @@ public class GridManager : MonoBehaviour
     private void OnUnitClicked(Unit unit)
     {
         clickedUnit = unit;
+
+        //foreach (var tile in tiles)
+        //{
+        //    tile.Value.YoyoColorChange();
+        //}
+        
     }
 
     private void OnTileClicked(int arg1, int arg2)
@@ -59,8 +74,10 @@ public class GridManager : MonoBehaviour
         {
             return;
         }
-
-        //TODO: if enemy on that tile ? fight : move.
+        //foreach (var tile in tiles)
+        //{
+        //    tile.Value.SetDefaultColor();
+        //}
         clickedUnit.MoveTowardsTile(new Vector2(arg1, arg2));
         clickedUnit = null;
     }
@@ -72,10 +89,10 @@ public class GridManager : MonoBehaviour
         {
             Destroy(item?.gameObject);
         }
-        foreach (var item in instantiatedEnemyList)
-        {
-            Destroy(item?.gameObject);
-        }
+        //foreach (var item in instantiatedEnemyList)
+        //{
+        //    Destroy(item?.gameObject);
+        //}
 
         GenerateGrid(GameData.GridData.width, GameData.GridData.height);
     }
@@ -84,10 +101,10 @@ public class GridManager : MonoBehaviour
     {
         tiles = new Dictionary<Vector2, Tile>();
         instantiatedTileList.Clear();
-        instantiatedEnemyList.Clear();
+        //instantiatedEnemyList.Clear();
 
-        int random_j = UnityEngine.Random.Range(0, height);
-        int random_i = UnityEngine.Random.Range(0, width / 2);
+        //int random_j = UnityEngine.Random.Range(0, height);
+        //int random_i = UnityEngine.Random.Range(0, width / 2);
 
         for (int i = 0; i < width; i++)
         {
@@ -103,12 +120,12 @@ public class GridManager : MonoBehaviour
                     generatedTile.GetComponent<Tile>().isEnemySide = true;
                 }
 
-                if (i == random_i && j == random_j)
-                {
-                    Debug.Log(new Vector2(i, j));
-                    var generatedEnemy = Instantiate(EnemyPrefab, new Vector2(i, j), Quaternion.identity);
-                    instantiatedEnemyList.Add(generatedEnemy.GetComponent<Enemy>());
-                }
+                //if (i == random_i && j == random_j)
+                //{
+                //    Debug.Log(new Vector2(i, j));
+                //    var generatedEnemy = Instantiate(EnemyPrefab, new Vector2(i, j), Quaternion.identity);
+                //    instantiatedEnemyList.Add(generatedEnemy.GetComponent<Enemy>());
+                //}
 
                 bool isOffset = (i % 2 == 0 && j % 2 == 1) || (i % 2 == 1 && j % 2 == 0);
 

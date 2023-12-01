@@ -5,12 +5,17 @@ using UnityEngine;
 public class MultiBuilding : Building
 {
     //[SerializeField] UnitSO[] units;
-    List<Unit> instantiatedUnits = new();
+    public List<Unit> instantiatedUnits = new();
 
     protected override void OnEnable()
     {
         base.OnEnable();
         GridManager.RestartGame += ClearUnits;
+    }
+
+    protected override void OnDisable()
+    {
+        GridManager.RestartGame -= ClearUnits;
     }
 
     protected override void Awake()
@@ -34,7 +39,8 @@ public class MultiBuilding : Building
         if (timer > 10)
         {
             timer = 0;
-            CreateUnit();
+            CreateUnit(buildingType.units[0].SOname, new Vector3(coveredTile[0].transform.position.x, coveredTile[0].transform.position.y,transform.position.z));
+            CreateUnit(buildingType.units[1].SOname, new Vector3(coveredTile[1].transform.position.x, coveredTile[1].transform.position.y, transform.position.z));
             loadingImage.fillAmount = 0;
         }
     }
@@ -47,10 +53,10 @@ public class MultiBuilding : Building
         }
     }
 
-    protected override void CreateUnit()
+    protected override void CreateUnit(string name,Vector3 pos)
     {
-        base.CreateUnit();     
-        GameObject instantiatedUnit = Instantiate(Resources.Load<GameObject>(buildingType.unit.SOname), transform.position, Quaternion.identity);     
+        base.CreateUnit(name,pos);     
+        GameObject instantiatedUnit = Instantiate(Resources.Load<GameObject>(name), pos, Quaternion.identity);     
         instantiatedUnit.GetComponent<Unit>().building = this;
         instantiatedUnits.Add(instantiatedUnit.GetComponent<Unit>());
     }

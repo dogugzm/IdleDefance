@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf68c9d9e8e36f4b8d05dc027faba42, type: 3}
   m_Name: Yaya2
   m_EditorClassIdentifier: 
-  SOname: 
-  AttackPoint: 0
-  Health: 0
-  DefencePower: 0
-  speed: 0
-  prefab: {fileID: 0}
+  SOname: Yaya2
+  AttackPoint: 30
+  Health: 120
+  DefencePower: 15
+  speed: 0.4
+  prefab: {fileID: 1353151611229980155, guid: 908e45aae25da734998c10c8ec1ddac0, type: 3}

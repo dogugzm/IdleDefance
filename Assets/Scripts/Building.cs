@@ -26,10 +26,7 @@ public class Building : MonoBehaviour
 
     [SerializeField] SpriteRenderer[] spriteRenderers;
 
-
-    public BuildingData myData;
     public BuildingSO buildingType;
-
 
     protected List<UnitData> unitDatas = new List<UnitData>();
 
@@ -47,15 +44,19 @@ public class Building : MonoBehaviour
             {
                 buildingType.cost = item.cost;
                 buildingType.SOname = item.SOname;
-                if (buildingType.unit== null)
+                if (item.unitDatas.Count <= 0)
                 {
                     return;
                 }
-                buildingType.unit.SOname = item.unitDatas[0].SOname;
-                buildingType.unit.AttackPoint = item.unitDatas[0].AttackPoint;
-                buildingType.unit.DefencePower = item.unitDatas[0].DefencePower;
-                buildingType.unit.Health = item.unitDatas[0].Health;
-                buildingType.unit.speed = item.unitDatas[0].speed;
+
+                for (int i = 0; i < item.unitDatas.Count; i++)
+                {
+                    buildingType.units[i].SOname = item.unitDatas[i].SOname;
+                    buildingType.units[i].AttackPoint = item.unitDatas[i].AttackPoint;
+                    buildingType.units[i].DefencePower = item.unitDatas[i].DefencePower;
+                    buildingType.units[i].Health = item.unitDatas[i].Health;
+                    buildingType.units[i].speed = item.unitDatas[i].speed;
+                }          
             }
         }
 
@@ -63,12 +64,17 @@ public class Building : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        //AddEventToButton(MoveButton);
-        //TODO: remove listener ondisable
+        
         OKButton.onClick.AddListener(BuildingApproved);
         RotateButton.onClick.AddListener(RotationClicked);
     }
-    
+
+    protected virtual void OnDisable()
+    {
+        OKButton.onClick.RemoveListener(BuildingApproved);
+        RotateButton.onClick.RemoveListener(RotationClicked);
+    }
+
     private void Start()
     {
         ChangeColor(PreColor);
@@ -101,12 +107,10 @@ public class Building : MonoBehaviour
         coveredTile.Clear();
         foreach (var sprite in spriteRenderers)
         {
-            Tile tile = GridManager.Instance.GetTileAtPosition(sprite.transform.position);
+            Tile tile = GridManager.Instance.GetTileAtPosition(new Vector2(Mathf.RoundToInt( sprite.transform.position.x), Mathf.RoundToInt(sprite.transform.position.y)));
             coveredTile.Add(tile);
         }
     }
-
-
 
     public void RotationClicked()
     {
@@ -114,9 +118,14 @@ public class Building : MonoBehaviour
         {
             return;
         }
-        GetTilesAtAllPositionsOfBuildings();
         isRotating = true;
-        Rotatable.DORotate(new Vector3(0, 0, -90), 0.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutElastic).OnComplete(() => isRotating = false);
+        Rotatable.DORotate(new Vector3(0, 0, -90), 0.5f, RotateMode.WorldAxisAdd).SetEase(Ease.OutElastic).OnComplete(RotatinComplete);
+    }
+
+    void RotatinComplete()
+    {
+        isRotating = false;
+        GetTilesAtAllPositionsOfBuildings();
     }
 
     public void BuildingApproved()
@@ -132,7 +141,7 @@ public class Building : MonoBehaviour
         MoveButton.gameObject.SetActive(false);
         OKButton.gameObject.SetActive(false);
         RotateButton.gameObject.SetActive(false);
-        BuilingApprovedAction?.Invoke(myData.cost);
+        BuilingApprovedAction?.Invoke(buildingType.cost);
         approved = true;
     }
 
@@ -141,7 +150,7 @@ public class Building : MonoBehaviour
            
     }
 
-    protected virtual void CreateUnit()
+    protected virtual void CreateUnit(string name, Vector3 pos)
     {      
         instantiatedUnitNumber++;
         instantiatedUnitNumberText.text = "x" + instantiatedUnitNumber.ToString();
@@ -168,8 +177,8 @@ public class Building : MonoBehaviour
         }
         Vector3 mousePos = Input.mousePosition;
         Vector2 newPosition = Camera.main.ScreenToWorldPoint(mousePos);
-       
-
+        
+            
         if (newPosition.x > xLimit)
         {
             newPosition.x = xLimit;
@@ -187,10 +196,8 @@ public class Building : MonoBehaviour
             newPosition.y = 0;
         }
 
-        Vector3 targetPos = new Vector3(Mathf.RoundToInt(newPosition.x), Mathf.RoundToInt(newPosition.y), -1);
+        Vector3 targetPos = new Vector3(Mathf.RoundToInt(newPosition.x), Mathf.RoundToInt(newPosition.y), 0);
         transform.DOMove(targetPos, 0.2f).SetEase(Ease.Flash).OnComplete(GetTilesAtAllPositionsOfBuildings);
-
-
     }
 
 

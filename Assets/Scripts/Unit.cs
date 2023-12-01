@@ -44,7 +44,7 @@ public class Unit : MonoBehaviour
             return;     
         }
         spriteRenderer.DOFade(0.5f, 0.5f);
-        GridManager.UnitClickEvent?.Invoke(this);     
+        GridManager.UnitClickEvent.Invoke(this);     
     }
 
 }

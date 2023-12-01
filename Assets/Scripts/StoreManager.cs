@@ -6,9 +6,18 @@ public class StoreManager : MonoBehaviour
     public int currentMoney;
 
     public static Action<int> UpdateMoneyText;
+    public static Action<int> ChecMoneyToBuy;
+
+    public static StoreManager Instance;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        Instance = this;
         currentMoney = 500;
     }
 
@@ -16,6 +25,12 @@ public class StoreManager : MonoBehaviour
     {
         Building.BuilingApprovedAction += BuyBuilding;
         SingleBuilding.AddMoneyOnEveryXSecond += GainMoney;
+    }
+
+    private void OnDisable()
+    {
+        Building.BuilingApprovedAction -= BuyBuilding;
+        SingleBuilding.AddMoneyOnEveryXSecond -= GainMoney;
     }
 
     public void BuyBuilding(int cost)
@@ -29,7 +44,6 @@ public class StoreManager : MonoBehaviour
         currentMoney += 10;
         UpdateMoneyText.Invoke(currentMoney);
     }
-
 
 
 }

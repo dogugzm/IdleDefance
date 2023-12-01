@@ -17,6 +17,7 @@ public class BuildingSO : ScriptableObject
     public int cost;
     public BuildingTypes type;
     public GameObject buildingPrefab;
-    public UnitSO unit;
+    public List<UnitSO> units = new();
+    //public UnitSO unit;
  
 }

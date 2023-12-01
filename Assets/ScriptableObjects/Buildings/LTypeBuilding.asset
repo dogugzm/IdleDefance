@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b005daf2553e780498deb26cb851e72e, type: 3}
   m_Name: LTypeBuilding
   m_EditorClassIdentifier: 
-  SOname: HORSE
+  SOname: LBuilding
   cost: 300
   type: 2
   buildingPrefab: {fileID: 8868142939700084853, guid: 551878042223c9247919c667c5f9b02d, type: 3}
+  units:
+  - {fileID: 11400000, guid: 358c6f8cc2eec91428c44feee041223e, type: 2}
+  - {fileID: 11400000, guid: 6d3d6dd98a46d3741a858648a5cf6f53, type: 2}
+  - {fileID: 11400000, guid: d29e10719e176c6438b475dc67c5af1b, type: 2}
