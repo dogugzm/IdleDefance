@@ -41,6 +41,10 @@ public class Tile : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (UIManager.isUIOverride)
+        {
+            return;
+        }
         MouseClicked();
     }
 

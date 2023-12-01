@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -44,6 +45,14 @@ public class UIManager : MonoBehaviour
     Building tempBuilding;
 
     bool isPopUpActive = false;
+
+    public static bool isUIOverride = false;
+
+
+    private void Update()
+    {
+        isUIOverride = EventSystem.current.IsPointerOverGameObject();
+    }
 
     private void OnEnable()
     {
@@ -87,6 +96,8 @@ public class UIManager : MonoBehaviour
         int width, height;
         width = int.Parse(WidthInput.text);
         height = int.Parse(HeightInput.text);
+        //hardcoded can get from config with events.
+        StoreManager.Instance.currentMoney = 500;
 
         if (width > 20 || height > 20)
         {

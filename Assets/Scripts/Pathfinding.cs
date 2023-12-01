@@ -52,7 +52,6 @@ public class Pathfinding
 
     private static float HeuristicCostEstimate(Vector2 start, Vector2 end)
     {
-        // Replace with your heuristic function, for example, Manhattan distance
         return Mathf.Abs(start.x - end.x) + Mathf.Abs(start.y - end.y);
     }
 
